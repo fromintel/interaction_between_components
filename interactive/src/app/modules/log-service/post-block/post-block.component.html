@@ -1,0 +1,10 @@
+<ul class="posts">
+  <li class="posts__item" *ngFor="let post of posts">
+    <div class="post-entity">
+      <i>{{ post.id }}</i>:
+      <b>{{ post.title }}</b>
+      <p>{{ post.message }}</p>
+      <span>{{ post.author }}</span>
+    </div>
+  </li>
+</ul>
