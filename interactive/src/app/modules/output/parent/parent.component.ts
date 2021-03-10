@@ -1,44 +1,46 @@
-import { Component } from '@angular/core';
-import { Person, PersonRole } from "../../../interfaces/person";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-parent',
   templateUrl: './parent.component.html',
   styleUrls: ['./parent.component.scss']
 })
-export class ParentComponent {
-  public persons: Person[]
+export class ParentComponent implements OnInit {
+  formTeams: FormGroup
 
-  constructor() {
-    this.persons = [
-      {
-        name: 'John',
-        role: PersonRole.HERO,
-        permissions: {
-          hasEntity: true,
-          isActiveAbility: false
-        }
-      },
-      {
-        name: 'Miles',
-        role: PersonRole.ROBBER,
-        permissions: {
-          hasEntity: false,
-          isActiveAbility: false
-        }
-      },
-      {
-        name: 'Jill',
-        role: PersonRole.VILLAIN,
-        permissions: {
-          hasEntity: false,
-        }
-      }
-    ]
+  ngOnInit() {
+    this.initTeamForm();
+    this.handleFormValue();
   }
 
-  removeItem(personItem: Person) {
-    const newPersonsList: Person[] = this.persons.filter((person: Person) => person.name !== personItem.name);
-    this.persons = [...newPersonsList];
+  initTeamForm(): void {
+    this.formTeams = new FormGroup({
+      email: new FormControl({ value: '', disabled: false } , [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(14)]),
+      metadata: new FormControl({ value: '', disabled: true } , []),
+      groups: new FormGroup({
+        name: new FormControl('John', Validators.required)
+      }),
+      lessons: new FormArray([])
+    })
+  }
+
+  handleFormValue(): void {
+    this.formTeams.valueChanges.subscribe({
+      next: (data) => {
+        console.log(data);
+      }
+    })
+  }
+
+  submit(): void {
+    console.log(this.formTeams);
+    console.log(this.formTeams.value);
+  }
+
+  addControl() {
+    const field = new FormControl('', []);
+    (this.formTeams.get('lessons') as FormArray).push(field);
   }
 }

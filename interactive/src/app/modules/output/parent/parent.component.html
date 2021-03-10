@@ -1,2 +1,30 @@
 <p>parent works!</p>
-<app-child *ngFor="let person of persons" [personEntity]="person" (onRemove)="removeItem($event)"></app-child>
+<!--<app-child *ngFor="let person of persons" [personEntity]="person" (onRemove)="removeItem($event)"></app-child>-->
+<form class="team-form" [formGroup]="formTeams" (ngSubmit)="submit()">
+  <div class="team-form__control team-control">
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="email..." formControlName="email">
+  </div>
+  <div class="team-form__control team-control">
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="password..." formControlName="password">
+  </div>
+  <div class="team-form__control team-control">
+    <label for="metadata">Metadata</label>
+    <input id="metadata" type="text" placeholder="metadata..." formControlName="metadata">
+  </div>
+  <div class="team-form__control team-control" formGroupName="groups">
+    <label for="name">Name</label>
+    <input id="name" type="text" placeholder="name..." formControlName="name">
+  </div>
+  <div class="team-form__control team-control" formGroupName="lessons">
+    <div *ngFor="let lesson of formTeams.get('lessons').controls; let i = index">
+      <label [for]="'lesson' + i">Name</label>
+      <input [id]="'lesson' + i" type="text" [formControlName]="i">
+    </div>
+  </div>
+  <div class="team-form">
+    <button (click)="addControl()">add</button>
+    <button type="submit">submit</button>
+  </div>
+</form>
